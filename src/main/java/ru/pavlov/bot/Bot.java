@@ -1,7 +1,5 @@
 package ru.pavlov.bot;
 
-import org.telegram.telegrambots.ApiContextInitializer;
-import org.telegram.telegrambots.TelegramBotsApi;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.Update;
@@ -15,7 +13,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class Bot extends TelegramLongPollingBot {
 
@@ -59,13 +56,14 @@ public class Bot extends TelegramLongPollingBot {
 
 
     private String getMessageRobot() {
-        return getMessage("/Users/antonpavlov/IdeaProjects/BotTelegram/src/main/resources/robot.txt");
+        return getMessage("./src/main/resources/robot.txt");
     }
 
 
     private String getMessageJoke() {
-        return getMessage("/Users/antonpavlov/IdeaProjects/BotTelegram/src/main/resources/joke.txt");
+        return getMessage("./src/main/resources/joke.txt");
     }
+
 
     private String getMessage(String pathToFile) {
         List<String> lines = null;
@@ -76,8 +74,7 @@ public class Bot extends TelegramLongPollingBot {
             e.printStackTrace();
         }
 
-        Set<String> set = new HashSet<>(lines);
-        lines = new ArrayList<>(set);
+        lines = new ArrayList<>(new HashSet<>(lines));
 
         int randomMessage = (int) (Math.random() * lines.size());
         String textMessage = lines.get(randomMessage);
@@ -86,7 +83,14 @@ public class Bot extends TelegramLongPollingBot {
             textMessage = getMessage(pathToFile);
         }
 
-
         return textMessage;
+    }
+
+    public String getBotUsername() {
+        return Config.BOT_NAME;
+    }
+
+    public String getBotToken() {
+        return Config.BOT_TOKEN;
     }
 }
